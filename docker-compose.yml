@@ -1,0 +1,50 @@
+version: "3.2"
+
+services:
+
+  db:
+    container_name: mysql_db
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: "gerenciamento_tarefas"
+      MYSQL_USER: "gerenciamento_tarefas"
+      MYSQL_PASSWORD: "pass2024"
+      MYSQL_ROOT_PASSWORD: "rootpass2024"
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - ./database/db_data:/var/lib/mysql
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 55
+    networks:
+      - internal
+
+  app:
+    container_name: gerenciamento_tarefas_app
+    build: ./
+    ports:
+      - "8080:80"
+    expose: 
+      - "8080"
+    volumes:
+      - /var/www/html/vendor
+      - /var/www/html/node_modules
+      - ./:/var/www/html
+    entrypoint: ./entrypoint.sh
+    command: php artisan serve --host=0.0.0.0 --port=80
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - internal
+
+networks:
+  internal:
+    driver: bridge
