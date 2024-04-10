@@ -70,7 +70,7 @@
                             <tr>
                                 <td colspan="7" class="px-6 py-4 whitespace-nowrap" v-if="!projects.length">
                                     <div class="text-sm text-center text-gray-900">
-                                        Nenhuma tarefa encontrada.
+                                        Nenhum projeto encontrado.
                                     </div>
                                 </td>
                             </tr>
