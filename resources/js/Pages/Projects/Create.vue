@@ -25,8 +25,7 @@
                             </label>
                             <textarea v-model="form.description"
                                 class="w-full px-3 py-2 mb-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                                id="description" type="text" rows="5">
-                    </textarea>
+                                id="description" type="text" rows="5"></textarea>
                             <span class="text-red-500">{{ errors.description }}</span>
                         </div>
 
@@ -34,7 +33,7 @@
                             <label class="block mb-2 text-sm font-bold text-gray-700" for="start_date">
                                 Data Início <span class="text-red-500">*</span>
                             </label>
-                            <input v-model="form.start_date" 
+                            <input v-model="form.start_date"
                                 class="w-full px-3 py-2 mb-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                                 id="start_date" type="date" />
                             <span class="text-red-500">{{ errors.start_date }}</span>
@@ -56,9 +55,8 @@
                             </label>
                             <select multiple
                                 class="w-full px-3 py-2 mb-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                                data-default
-                                id="members">
-                                <option v-for="user in users" selected  :value="`${ user.id }`">
+                                data-default id="members">
+                                <option v-for="user in users" selected :value="`${user.id}`">
                                     {{ user.name }}
                                 </option>
                             </select>
@@ -121,10 +119,10 @@ export default {
             $("#form_projects #members").select2().val(this.$page.props.auth.user.id).trigger('change');
         });
 
-       let date = new Date();
-       let start_date = date.toISOString().slice(0, 10);
-       date.setMonth(date.getMonth() + 1);
-       let expected_completion_date = date.toISOString().slice(0, 10);
+        let date = new Date();
+        let start_date = date.toISOString().slice(0, 10);
+        date.setMonth(date.getMonth() + 1);
+        let expected_completion_date = date.toISOString().slice(0, 10);
 
         this.form.start_date = start_date;
         this.form.expected_completion_date = expected_completion_date;

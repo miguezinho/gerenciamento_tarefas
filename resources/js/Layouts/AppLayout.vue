@@ -40,10 +40,8 @@ const logout = () => {
                     <div class="flex justify-between h-16">
                         <div class="flex">
                             <!-- Logo -->
-                            <div class="shrink-0 flex items-center">
-                                <Link :href="route('dashboard')">
-                                    <ApplicationMark class="block h-9 w-auto" />
-                                </Link>
+                            <div class="shrink-0 flex items-center text-blue-500">
+                                <i class="fa-solid fa-diagram-project fa-2xl"></i>
                             </div>
 
                             <!-- Navigation Links -->
@@ -51,8 +49,11 @@ const logout = () => {
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </NavLink>
-                                <NavLink :href="route('projects.index')" :active="route().current('projects.index')">
+                                <NavLink :href="route('projects.index')" :active="route().current('projects.*')">
                                     Projetos
+                                </NavLink>
+                                <NavLink :href="route('project_tasks.index')" :active="route().current('project_tasks.*')">
+                                    Tarefas
                                 </NavLink>
                             </div>
                         </div>
@@ -141,6 +142,9 @@ const logout = () => {
                         </ResponsiveNavLink>
                         <ResponsiveNavLink :href="route('projects.index')" :active="route().current('projects.index')">
                             Projetos
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('project_tasks.index')" :active="route().current('project_tasks.index')">
+                            Tarefas
                         </ResponsiveNavLink>
                     </div>
 

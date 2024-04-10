@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\ProjectMembers;
-use App\Models\ProjectTasks;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +16,14 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::with(['user', 'members.user'])->get();
+        $projects = Project::with(['user', 'members.user'])
+            ->where(function ($query) {
+                $query->where('user_id', Auth::user()->id)
+                    ->orWhereHas('members', function ($subquery) {
+                        $subquery->where('user_id', Auth::user()->id);
+                    });
+            })
+            ->get();
 
         return Inertia::render('Projects/Index', ['projects' => $projects]);
     }
@@ -37,17 +43,20 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'start_date' => 'required',
-            'expected_completion_date' => 'required',
-        ], [
-            'title.required' => 'O título é obrigatório.',
-            'description.required' => 'A descrição é obrigatória.',
-            'start_date.required' => 'A data de início é obrigatória.',
-            'expected_completion_date.required' => 'A previsão de conclusão é obrigatória.',
-        ]);
+        $validatedData = $request->validate(
+            [
+                'title' => 'required',
+                'description' => 'required',
+                'start_date' => 'required',
+                'expected_completion_date' => 'required',
+            ],
+            [
+                'title.required' => 'O título é obrigatório.',
+                'description.required' => 'A descrição é obrigatória.',
+                'start_date.required' => 'A data de início é obrigatória.',
+                'expected_completion_date.required' => 'A previsão de conclusão é obrigatória.',
+            ]
+        );
 
         $validatedData['user_id'] = Auth::user()->id;
 
@@ -82,7 +91,7 @@ class ProjectController extends Controller
         $project = Project::with('members')->findOrFail($id);
 
         if ($project->user_id != Auth::user()->id)
-            return redirect()->route('projects.index')->with('error', 'Você não tem permissão para editar esse projeto!');
+            return redirect()->route('projects.index')->with('error', 'Somente o criador pode editar esse projeto!');
 
         $users = User::orderBy('name')->get();
 
@@ -100,19 +109,22 @@ class ProjectController extends Controller
         $project = Project::findOrFail($id);
 
         if ($project->user_id != Auth::user()->id)
-            return redirect()->route('projects.index')->with('error', 'Você não tem permissão para editar esse projeto!');
+            return redirect()->route('projects.index')->with('error', 'Somente o criador pode editar esse projeto!');
 
-        $validatedData = $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'start_date' => 'required',
-            'expected_completion_date' => 'required',
-        ], [
-            'title.required' => 'O título é obrigatório.',
-            'description.required' => 'A descrição é obrigatória.',
-            'start_date.required' => 'A data de início é obrigatória.',
-            'expected_completion_date.required' => 'A previsão de conclusão é obrigatória.',
-        ]);
+        $validatedData = $request->validate(
+            [
+                'title' => 'required',
+                'description' => 'required',
+                'start_date' => 'required',
+                'expected_completion_date' => 'required',
+            ],
+            [
+                'title.required' => 'O título é obrigatório.',
+                'description.required' => 'A descrição é obrigatória.',
+                'start_date.required' => 'A data de início é obrigatória.',
+                'expected_completion_date.required' => 'A previsão de conclusão é obrigatória.',
+            ]
+        );
 
         $project->update($validatedData);
 
@@ -143,7 +155,7 @@ class ProjectController extends Controller
         $project = Project::findOrFail($id);
 
         if ($project->user_id != Auth::user()->id)
-            return redirect()->route('projects.index')->with('error', 'Você não tem permissão para excluir esse projeto!');
+            return redirect()->route('projects.index')->with('error', 'Somente o criador pode excluir esse projeto!');
 
         if ($project->members) {
             foreach ($project->members as $member) {

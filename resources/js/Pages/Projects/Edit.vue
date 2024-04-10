@@ -25,8 +25,7 @@
                             </label>
                             <textarea v-model="form.description"
                                 class="w-full px-3 py-2 mb-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                                id="description" type="text" rows="5">
-                    </textarea>
+                                id="description" type="text" rows="5"></textarea>
                             <span class="text-red-500">{{ errors.description }}</span>
                         </div>
 
