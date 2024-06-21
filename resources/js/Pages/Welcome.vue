@@ -88,8 +88,6 @@ function handleImageError() {
                                     - Docker<br /><br />
                                     - Git<br /><br />
                                     - Mysql<br /><br />
-                                    <br />
-                                    Dedico este projeto para a empresa Leme Inteligência Forense à fim de cumprir o desafio proposto.
                                 </p>
                             </div>
                         </div>
